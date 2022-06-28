@@ -18,14 +18,8 @@ M.on_attach = function(client, bufnr)
    local lsp_mappings = utils.load_config().mappings.lspconfig
    utils.load_mappings({ lsp_mappings }, { buffer = bufnr })
 
-   if client.supports_method "textDocument/signatureHelp" then
-      vim.api.nvim_create_autocmd({ "CursorHoldI" }, {
-         pattern = "*",
-         group = vim.api.nvim_create_augroup("LspSignature", {}),
-         callback = function()
-            vim.lsp.buf.signature_help()
-         end,
-      })
+   if client.server_capabilities.signatureHelpProvider then
+      require("nvchad.ui.signature").setup(client)
    end
 end
 
